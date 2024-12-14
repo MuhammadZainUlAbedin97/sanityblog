@@ -3,7 +3,7 @@ import { POSTS_QUERY } from "@/sanity/lib/queries";
 import { PostCard } from "@/components/PostCard";
 import { Title } from "@/components/Title";
 
-const options = { next: { revalidate: 60 } };
+const options = { next: { revalidate: 120 } };
 
 export default async function Page() {
 	const posts = await client.fetch(POSTS_QUERY, {}, options);
