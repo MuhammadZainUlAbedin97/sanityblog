@@ -11,11 +11,7 @@ export async function generateStaticParams() {
 	return slugs;
 }
 
-export default async function Page({
-	params,
-}: {
-	params: Promise<{ slug: string }>;
-}) {
+export default async function Page({ params }: { params: any }) {
 	const post = await sanityFetch({
 		query: POST_QUERY,
 		params,
