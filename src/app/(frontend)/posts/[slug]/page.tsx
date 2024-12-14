@@ -11,11 +11,16 @@ export async function generateStaticParams() {
 	return slugs;
 }
 
-export default async function Page({ params }: { params: any }) {
+export default async function Page({
+	params,
+}: {
+	params: Promise<{ slug: string }>;
+}) {
+	const resolvedParams = await params;
 	const post = await sanityFetch({
 		query: POST_QUERY,
-		params,
-		tags: [`post:${params.slug}`, "author", "category"],
+		params: resolvedParams,
+		tags: [`post:${resolvedParams.slug}`, "author", "category"],
 	});
 
 	if (!post) {
