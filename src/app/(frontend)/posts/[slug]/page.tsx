@@ -1,16 +1,25 @@
-import { sanityFetch } from "@/sanity/lib/live";
-import { POST_QUERY } from "@/sanity/lib/queries";
+import { client, sanityFetch } from "@/sanity/lib/client";
+import { POST_QUERY, POSTS_SLUGS_QUERY } from "@/sanity/lib/queries";
 import { Post } from "@/components/Post";
 import { notFound } from "next/navigation";
+
+export async function generateStaticParams() {
+	const slugs = await client
+		.withConfig({ useCdn: false })
+		.fetch(POSTS_SLUGS_QUERY);
+
+	return slugs;
+}
 
 export default async function Page({
 	params,
 }: {
 	params: Promise<{ slug: string }>;
 }) {
-	const { data: post } = await sanityFetch({
+	const post = await sanityFetch({
 		query: POST_QUERY,
-		params: await params,
+		params,
+		tags: [`post:${params.slug}`, "author", "category"],
 	});
 
 	if (!post) {
